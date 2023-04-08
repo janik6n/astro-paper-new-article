@@ -7,12 +7,16 @@ import inquirer from 'inquirer';
 
 const logError = async (message) => {
   const error = chalk.bold.red;
-  console.log(error(message));
+  console.log(`❌ ${error(message)}`);
 }
 
 const logSuccess = async (message) => {
   const success = chalk.bold.green;
-  console.log(success(message));
+  console.log(`✅ ${success(message)}`);
+}
+
+const logWarning = async (message) => {
+  console.log(`⚠️  ${message}`);
 }
 
 const logInfo = async (message) => {
@@ -71,7 +75,7 @@ const askInputs = async (proposedArticleDate, proposedTags) => {
 const createContentDirectory = async (path) => {
   try {
     await stat(path);
-    await logInfo(`Content directory ${path} already exists.`);
+    await logWarning(`Content directory ${path} already exists.`);
   } catch (err) {
     if (err.code === 'ENOENT') {
       await logInfo(`Content directory ${path} does not exist, creating...`);
@@ -122,9 +126,19 @@ const createArticle = async (articleDirectory, articleFileName, content) => {
   const userInputs = await askInputs(today, packageJson.astroNewArticle.proposedTags);
 
   const data = {...userInputs};
-  data.contentDirectory = `${contentDirectoryBasePath}/${data.articleDate}`;
   data.articleSlug = slug(data.articleTitle);
   data.ogImage = packageJson.astroNewArticle.defaultOgImage;
+
+  // Determine the desired format for the content directory
+  if (packageJson.astroNewArticle.contentSubDirectory == 'date') {
+    data.contentDirectory = `${contentDirectoryBasePath}/${data.articleDate}`;
+  } else if (packageJson.astroNewArticle.contentSubDirectory == 'slug') {
+    data.contentDirectory = `${contentDirectoryBasePath}/${data.articleSlug}`;
+  } else {
+    await logInfo(``);
+    await logWarning(`Config for contentSubDirectory is missing, defaulting to date`);
+    data.contentDirectory = `${contentDirectoryBasePath}/${data.articleDate}`;
+  }
 
   // tags array to string
   let tagsString = `\n`;
@@ -144,7 +158,10 @@ const createArticle = async (articleDirectory, articleFileName, content) => {
     `draft: ${data.draft}\n` +
     `tags: ${tagsString}---\n\n## Table of contents\n\n## Intro\n\nHello`;
 
+  await logInfo(``);
   await createContentDirectory(data.contentDirectory);
+  await logInfo(``);
   await createArticle(articleDirectory, `${data.articleSlug}.md`, content);
-  await logSuccess(`\nTemplate ready, time to start writing! 🚀`);
+  await logInfo(``);
+  await logSuccess(`Article ready, time to start writing! 🚀`);
 })();

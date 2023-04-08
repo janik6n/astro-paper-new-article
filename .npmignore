@@ -1,0 +1,9 @@
+**/node_modules/
+**/.serverless/
+.DS_Store
+*.log
+data/
+public/
+src/
+**/.env
+CHANGELOG.md

@@ -2,7 +2,7 @@
 
 Scaffold new blog post for [Astro-based](https://astro.build/) blog using theme [Astro Paper](https://github.com/satnaing/astro-paper).
 
-## Installation:
+## Installation
 
 In your blog project, install package using npm:
 ```bash
@@ -17,6 +17,7 @@ Scaffolding uses custom configuration in root-level `package.json`. Add the foll
 "astroNewArticle": {
   "blogPath": "src/content/blog",
   "contentPath": "public/assets",
+  "contentSubDirectory": "slug",
   "author": "Demo Writer",
   "defaultOgImage": "http://[domain-here]/demo.jpg",
   "proposedTags": [
@@ -32,7 +33,8 @@ Scaffolding uses custom configuration in root-level `package.json`. Add the foll
 Parameters:
 
 - blogPath: Path to markdown files for blog (this should not require changes).
-- contentPath: Path to local images etc. for blog articles (this should not require changes). Scaffolding will create a directory in here, with date as name, e.g. `2023-04-05`.
+- contentPath: Path to local images etc. for blog articles (this should not require changes). Scaffolding will create a directory in here, defaulting to date (see below parameter)
+- contentSubDirectory: `date` or `slug`. Option date will create `2023-04-08` and `slug` will use *the article name slug* as directory name (e.g. "Demo article" > `demo-article`).
 - author: Author's name.
 - defaultOgImage: Default OG image to be used.
 - proposedTags: Which tags are selectable while scaffolding.
@@ -48,5 +50,8 @@ npx new-article
 
 Optionally you can add this also to `scripts` in `package.json`, for example `"new": "new-article"`. Then you can run `npm run new`.
 
+## Changelog
+
+[CHANGELOG](https://github.com/janik6n/astro-paper-new-article/blob/main/CHANGELOG.md)
 
 MIT License. Copyright janik6n.
