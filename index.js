@@ -3,7 +3,7 @@
 import {mkdir, readFile, stat, writeFile} from 'fs/promises';
 import chalk from 'chalk';
 import GithubSlugger, {slug} from 'github-slugger';
-import inquirer from 'inquirer';
+import { checkbox, confirm, input } from '@inquirer/prompts';
 
 const logError = async (message) => {
   const error = chalk.bold.red;
@@ -21,55 +21,6 @@ const logWarning = async (message) => {
 
 const logInfo = async (message) => {
   console.log(message);
-}
-
-const askInputs = async (proposedArticleDate, proposedTags) => {
-
-  let tagChoices = [];
-  for (let i = 0; i < proposedTags.length; i++) {
-    tagChoices.push({"name": proposedTags[i]});
-  }
-
-  return inquirer
-    .prompt([
-      {
-        type: 'input',
-        name: 'articleTitle',
-        message: "Title for the new article:"
-      },
-      {
-        type: 'input',
-        name: 'articleDate',
-        message: "Date for the new article (YYYY-MM-DD):",
-        default() {
-          return `${proposedArticleDate}`;
-        }
-      },
-      {
-        type: 'confirm',
-        name: 'createContentDirectory',
-        message: `Create content directory for images?`,
-        default: true
-      },
-      {
-        type: 'confirm',
-        name: 'featured',
-        message: `Will this be a featured article?`,
-        default: false
-      },
-      {
-        type: 'confirm',
-        name: 'draft',
-        message: `Will this be a draft?`,
-        default: false
-      },
-      {
-        type: 'checkbox',
-        message: 'Tags:',
-        name: 'tags',
-        choices: tagChoices
-      },
-    ]);
 }
 
 const createContentDirectory = async (path) => {
@@ -123,9 +74,28 @@ const createArticle = async (articleDirectory, articleFileName, content) => {
   const contentDirectoryBasePath = `${process.cwd()}/${packageJson.astroNewArticle.contentPath}`;
   const articleDirectory = `${process.cwd()}/${packageJson.astroNewArticle.blogPath}`;
 
-  const userInputs = await askInputs(today, packageJson.astroNewArticle.proposedTags);
+  // Query inputs from user
+  const data = {};
+  data.articleTitle = await input({ message: 'Title for the new article:' });
+  data.articleDate = await input({
+    message: 'Date for the new article (YYYY-MM-DD):',
+    default: today
+  });
+  data.createContentDirectory = await confirm({ message: 'Create content directory for images?' });
+  data.featured = await confirm({ message: 'Will this be a featured article?' });
+  data.draft = await confirm({ message: 'Will this be a draft?' });
 
-  const data = {...userInputs};
+  let tagChoices = [];
+  for (let i = 0; i < packageJson.astroNewArticle.proposedTags.length; i++) {
+    tagChoices.push({
+      "name": packageJson.astroNewArticle.proposedTags[i],
+      "value": packageJson.astroNewArticle.proposedTags[i]
+    });
+  }
+  data.tags = await checkbox({ message: 'Tags:', choices: tagChoices });
+
+  // Start processing inputs
+
   data.articleSlug = slug(data.articleTitle);
   data.ogImage = packageJson.astroNewArticle.defaultOgImage;
 
@@ -142,8 +112,8 @@ const createArticle = async (articleDirectory, articleFileName, content) => {
 
   // tags array to string
   let tagsString = `\n`;
-  for (let i = 0; i < userInputs.tags.length; i++) {
-    tagsString = tagsString.concat(`  - ${userInputs.tags[i]}\n`);
+  for (let i = 0; i < data.tags.length; i++) {
+    tagsString = tagsString.concat(`  - ${data.tags[i]}\n`);
   }
 
 

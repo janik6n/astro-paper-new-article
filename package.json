@@ -1,6 +1,6 @@
 {
   "name": "astro-paper-new-article",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Scaffold new article for Astro-based blog using Astro Paper theme.",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "url": "https://github.com/janik6n/astro-paper-new-article.git"
   },
   "bugs": {
-    "url" : "https://github.com/janik6n/astro-paper-new-article/issues"
+    "url": "https://github.com/janik6n/astro-paper-new-article/issues"
   },
   "keywords": [
     "blogging",
@@ -26,8 +26,8 @@
     "new-article": "./index.js"
   },
   "dependencies": {
+    "@inquirer/prompts": "^2.1.1",
     "chalk": "^5.2.0",
-    "github-slugger": "^2.0.0",
-    "inquirer": "^9.1.5"
+    "github-slugger": "^2.0.0"
   }
 }
