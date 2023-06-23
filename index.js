@@ -129,7 +129,10 @@ const createArticle = async (articleDirectory, articleFileName, content) => {
     `tags: ${tagsString}---\n\n## Table of contents\n\n## Intro\n\nHello`;
 
   await logInfo(``);
-  await createContentDirectory(data.contentDirectory);
+
+  if (data.createContentDirectory === true) {
+    await createContentDirectory(data.contentDirectory);
+  }
   await logInfo(``);
   await createArticle(articleDirectory, `${data.articleSlug}.md`, content);
   await logInfo(``);
