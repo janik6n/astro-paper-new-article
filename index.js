@@ -72,6 +72,7 @@ const createArticle = async (articleDirectory, articleFileName, content) => {
   // Current date to YYYY-MM-DD
   const today = new Date().toISOString().slice(0, 10);
   const contentDirectoryBasePath = `${process.cwd()}/${packageJson.astroNewArticle.contentPath}`;
+  let contentDirectory = ``;
   const articleDirectory = `${process.cwd()}/${packageJson.astroNewArticle.blogPath}`;
 
   // Query inputs from user
@@ -102,8 +103,10 @@ const createArticle = async (articleDirectory, articleFileName, content) => {
   // Determine the desired format for the content directory
   if (packageJson.astroNewArticle.contentSubDirectory == 'date') {
     data.contentDirectory = `${contentDirectoryBasePath}/${data.articleDate}`;
+    contentDirectory = data.articleDate;
   } else if (packageJson.astroNewArticle.contentSubDirectory == 'slug') {
     data.contentDirectory = `${contentDirectoryBasePath}/${data.articleSlug}`;
+    contentDirectory = data.articleSlug;
   } else {
     await logInfo(``);
     await logWarning(`Config for contentSubDirectory is missing, defaulting to date`);
@@ -122,11 +125,11 @@ const createArticle = async (articleDirectory, articleFileName, content) => {
     `pubDatetime: ${data.articleDate}\n` +
     `title: ${data.articleTitle}\n` +
     `description: ${data.articleTitle}\n` +
-    `postSlug: ${data.articleSlug}\n` +
+    `slug: ${data.articleSlug}\n` +
     `ogImage: ${data.ogImage}\n` +
     `featured: ${data.featured}\n` +
     `draft: ${data.draft}\n` +
-    `tags: ${tagsString}---\n\n## Table of contents\n\n## Intro\n\nHello`;
+    `tags: ${tagsString}---\n\n## Table of contents\n\n## Intro\n\nHello, this is an image reference ![picture-here](@assets/${contentDirectory}/picture-here.png)`;
 
   await logInfo(``);
 

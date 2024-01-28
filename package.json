@@ -1,6 +1,6 @@
 {
   "name": "astro-paper-new-article",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Scaffold new article for Astro-based blog using Astro Paper theme.",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/janik6n/astro-paper-new-article#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/janik6n/astro-paper-new-article.git"
+    "url": "git+https://github.com/janik6n/astro-paper-new-article.git"
   },
   "bugs": {
     "url": "https://github.com/janik6n/astro-paper-new-article/issues"
@@ -23,11 +23,11 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "new-article": "./index.js"
+    "new-article": "index.js"
   },
   "dependencies": {
-    "@inquirer/prompts": "^2.1.1",
-    "chalk": "^5.2.0",
+    "@inquirer/prompts": "^3.3.2",
+    "chalk": "^5.3.0",
     "github-slugger": "^2.0.0"
   }
 }

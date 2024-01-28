@@ -16,7 +16,7 @@ Scaffolding uses custom configuration in root-level `package.json`. Add the foll
 ```json
 "astroNewArticle": {
   "blogPath": "src/content/blog",
-  "contentPath": "public/assets",
+  "contentPath": "src/assets",
   "contentSubDirectory": "slug",
   "author": "Demo Writer",
   "defaultOgImage": "http://[domain-here]/demo.jpg",
